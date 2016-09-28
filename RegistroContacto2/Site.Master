@@ -1,0 +1,126 @@
+﻿<%@ Master Language="C#"%>
+<%@ Import Namespace="BLL" %>
+<%@ Import Namespace="DAL"  %>
+
+
+<!DOCTYPE html>
+<script runat="server">
+
+    protected void ButtonGuardar_Click(object sender, EventArgs e)
+    {
+        Contacto contacto = new Contacto();
+
+        contacto.contactoId = Convert.ToInt32(TextBoxContactoId.Text);
+        contacto.correo = TextBoxCorreo.Text;
+        contacto.asunto = TextBoxAsunto.Text;
+        contacto.mensaje = TextBoxMensaje.Text;
+
+
+        if (contacto.Insertar())
+        {
+            Response.Write("se guardo correctamente");
+            TextBoxContactoId.Text = string.Empty;
+            TextBoxCorreo.Text = string.Empty;
+            TextBoxAsunto.Text = string.Empty;
+            TextBoxMensaje.Text = string.Empty;
+        }
+        else if(contacto.Insertar())
+        {
+            Response.Write("no se guardo correctamente");
+
+        }
+    }
+    protected void ButtonNuevo_Click(object sender, EventArgs e)
+    {
+        TextBoxContactoId.Text = string.Empty;
+        TextBoxCorreo.Text = string.Empty;
+        TextBoxAsunto.Text = string.Empty;
+        TextBoxMensaje.Text = string.Empty;
+
+    }
+
+    protected void ButtonEliminar_Click(object sender, EventArgs e)
+    {
+        Contacto contacto = new Contacto();
+       // contacto.correo = TextBoxCorreo.Text;
+        contacto.contactoId = Convert.ToInt32(TextBoxContactoId.Text);
+        //contacto.asunto = TextBoxAsunto.Text;
+        //contacto.mensaje = TextBoxMensaje.Text;
+
+        if (contacto.Eliminar())
+        {
+
+
+            Response.Write("se elimino correctamente");
+            TextBoxContactoId.Text = string.Empty;
+            TextBoxCorreo.Text = string.Empty;
+            TextBoxAsunto.Text = string.Empty;
+            TextBoxMensaje.Text = string.Empty;
+
+
+        }
+        else
+        {
+            Response.Write("no se elimino correctamente");
+
+        }
+    }
+
+</script>
+
+<html>
+    <head runat="server">
+        <link href="BootStrap/StyleSheet1.css" rel="stylesheet" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+            <title>Master Page</title>
+                <asp:ContentPlaceHolder ID="head" runat="server">
+                </asp:ContentPlaceHolder>
+        <style type="text/css">
+            .panel-body {
+                margin-left: 0px;
+            }
+            .auto-style1 {
+                font-size: medium;
+            }
+        </style>
+     </head>
+     <body>
+        <form runat="server" style="margin-left: 0px">
+            <div style="margin-left: 1px">
+                    <div class="panel panel-default" >
+                        <div class="panel-heading"><center><h3>Registro De Contacto</h3></center></div>
+                            <div class="panel-body">
+                                <div style="width: 941px; margin-left: 354px;"> ContactoID: <asp:TextBox ID="TextBoxContactoId" runat="server" Width="107px" Rows="1" TextMode="Number"/>&nbsp;<asp:Button ID="ButtonBuscar" runat="server" Text="Buscar" />
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="TextBoxContactoId" ErrorMessage="Campo Requerido Para Continuar" ForeColor="Red" ></asp:RequiredFieldValidator>
+                                </div>
+                                <br />
+                                <div style="margin-left: 383px"> Correo: <asp:TextBox ID="TextBoxCorreo" runat="server" TextMode="Email" Width="477px"></asp:TextBox>
+                                
+                                </div>
+                                <br />
+                                <div style="margin-left: 383px"> Asunto: <asp:TextBox ID="TextBoxAsunto" runat="server" Width="478px"></asp:TextBox></div>
+                                <br />
+                                <div style="margin-left: 374px">Mensaje: <asp:TextBox ID="TextBoxMensaje" runat="server" TextMode="MultiLine" Height="93px" Width="478px"></asp:TextBox></div>
+                                <br />
+                                <div style="margin-left: 540px">
+                                    <asp:Button ID="ButtonGuardar" runat="server" Text="Guardar" OnClick="ButtonGuardar_Click" CssClass="auto-style1" />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <asp:Button ID="ButtonNuevo" runat="server" Text="Nuevo" OnClick="ButtonNuevo_Click" CssClass="auto-style1"/>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <asp:Button ID="ButtonEliminar" runat="server" Text="Eliminar" CssClass="auto-style1" OnClick="ButtonEliminar_Click"/>
+                                </div>
+                            </div>
+                    </div>
+            </div>             
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource1">
+                <Columns>
+                    <asp:BoundField DataField="ContactoId" HeaderText="ContactoId" SortExpression="ContactoId" />
+                    <asp:BoundField DataField="Correo" HeaderText="Correo" SortExpression="Correo" />
+                    <asp:BoundField DataField="Asunto" HeaderText="Asunto" SortExpression="Asunto" />
+                    <asp:BoundField DataField="Mensaje" HeaderText="Mensaje" SortExpression="Mensaje" />
+                </Columns>
+            </asp:GridView>
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ContactoConnectionString %>" SelectCommand="SELECT * FROM [Contacto]"></asp:SqlDataSource>
+        </form>
+    </body>
+</html>
